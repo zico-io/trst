@@ -6,7 +6,6 @@ export const mockTrustCenterData: TrustCenterData = {
     {
       id: "hipaa",
       name: "HIPAA",
-      abbreviation: "HIPAA",
       status: "certified",
       percentage: 100,
       auditor: "Coalfire",
@@ -15,7 +14,6 @@ export const mockTrustCenterData: TrustCenterData = {
     {
       id: "soc2",
       name: "SOC 2 Type II",
-      abbreviation: "SOC 2",
       status: "in-progress",
       percentage: 78,
       auditTarget: "Q3 2026",
@@ -23,7 +21,6 @@ export const mockTrustCenterData: TrustCenterData = {
     {
       id: "gdpr",
       name: "GDPR",
-      abbreviation: "GDPR",
       status: "in-progress",
       percentage: 62,
       auditTarget: "Q4 2026",
@@ -31,7 +28,6 @@ export const mockTrustCenterData: TrustCenterData = {
     {
       id: "iso27001",
       name: "ISO 27001",
-      abbreviation: "ISO 27001",
       status: "in-progress",
       percentage: 45,
       auditTarget: "Q1 2027",

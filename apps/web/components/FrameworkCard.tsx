@@ -61,12 +61,6 @@ export function FrameworkCard({ framework }: FrameworkCardProps) {
                 </div>
               )}
             </div>
-            <span
-              style={{ color: "var(--color-text-muted)" }}
-              className="text-[9px] font-bold tracking-wide leading-none"
-            >
-              {framework.abbreviation}
-            </span>
           </div>
 
           {/* Right column */}

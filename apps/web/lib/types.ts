@@ -5,7 +5,6 @@ export type FrameworkStatus = "certified" | "in-progress";
 export interface FrameworkDisplayCard {
   id: FrameworkId;
   name: string;
-  abbreviation: string;
   status: FrameworkStatus;
   percentage: number;
   // certified only
