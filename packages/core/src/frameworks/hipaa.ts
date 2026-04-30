@@ -66,8 +66,7 @@ export const hipaa: ComplianceFramework = {
       frameworkId: "hipaa",
       ref: "164.312(a)(2)(iv)",
       title: "Encryption and Decryption",
-      description:
-        "Implement a mechanism to encrypt and decrypt ePHI.",
+      description: "Implement a mechanism to encrypt and decrypt ePHI.",
     },
     {
       id: "hipaa-164.312-b",

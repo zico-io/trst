@@ -11,11 +11,9 @@ import type { ControlStatus, FrameworkId, FrameworkScore } from "@trst/shared";
  */
 export function scoreFramework(
   controlStatuses: ControlStatus[],
-  frameworkId: FrameworkId,
+  frameworkId: FrameworkId
 ): FrameworkScore {
-  const relevant = controlStatuses.filter(
-    (s) => s.frameworkId === frameworkId,
-  );
+  const relevant = controlStatuses.filter((s) => s.frameworkId === frameworkId);
 
   let passing = 0;
   let partial = 0;
@@ -45,8 +43,7 @@ export function scoreFramework(
 
   const total = relevant.length;
   const applicable = total - notApplicable;
-  const percentage =
-    applicable === 0 ? 0 : ((passing * 1 + partial * 0.5) / applicable) * 100;
+  const percentage = applicable === 0 ? 0 : ((passing * 1 + partial * 0.5) / applicable) * 100;
 
   return {
     frameworkId,

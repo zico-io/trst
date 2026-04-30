@@ -5,7 +5,7 @@ import { scoreFramework } from "../scoring";
 const makeStatus = (
   controlId: string,
   status: ControlStatus["status"],
-  score: number,
+  score: number
 ): ControlStatus => ({
   frameworkId: "soc2",
   controlId,
@@ -36,10 +36,10 @@ describe("scoreFramework", () => {
 
   it("computes correct percentage for a mix of passing, partial, and failing", () => {
     const statuses: ControlStatus[] = [
-      makeStatus("cc6.1", "passing", 1),   // +1.0
+      makeStatus("cc6.1", "passing", 1), // +1.0
       makeStatus("cc6.2", "partial", 0.5), // +0.5
-      makeStatus("cc6.3", "failing", 0),   // +0.0
-      makeStatus("cc6.7", "failing", 0),   // +0.0
+      makeStatus("cc6.3", "failing", 0), // +0.0
+      makeStatus("cc6.7", "failing", 0), // +0.0
     ];
 
     const result = scoreFramework(statuses, "soc2");

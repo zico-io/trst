@@ -28,7 +28,7 @@ export interface GapReport {
  */
 export function computeGap(
   controlStatuses: ControlStatus[],
-  framework: ComplianceFramework,
+  framework: ComplianceFramework
 ): GapReport {
   const statusByControlId = new Map<string, ControlStatus["status"]>();
 

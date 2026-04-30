@@ -26,8 +26,7 @@ export const iso27001: ComplianceFramework = {
       frameworkId: "iso27001",
       ref: "5.16",
       title: "Identity Management",
-      description:
-        "The full life cycle of identities shall be managed.",
+      description: "The full life cycle of identities shall be managed.",
     },
     {
       id: "iso27001-5.17",
@@ -82,8 +81,7 @@ export const iso27001: ComplianceFramework = {
       frameworkId: "iso27001",
       ref: "8.28",
       title: "Secure Coding",
-      description:
-        "Secure coding principles shall be applied to software development.",
+      description: "Secure coding principles shall be applied to software development.",
     },
   ],
 };

@@ -10,8 +10,7 @@ export const soc2: ComplianceFramework = {
       frameworkId: "soc2",
       ref: "CC1.1",
       title: "COSO Principle 1: Commitment to Integrity and Ethical Values",
-      description:
-        "The entity demonstrates a commitment to integrity and ethical values.",
+      description: "The entity demonstrates a commitment to integrity and ethical values.",
     },
     {
       id: "soc2-cc2.2",

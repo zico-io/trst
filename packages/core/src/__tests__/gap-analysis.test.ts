@@ -1,10 +1,5 @@
 import { describe, expect, it } from "bun:test";
-import type {
-  ComplianceFramework,
-  Control,
-  ControlStatus,
-  Finding,
-} from "@trst/shared";
+import type { ComplianceFramework, Control, ControlStatus, Finding } from "@trst/shared";
 import { computeGap, deduplicateFindings } from "../gap-analysis";
 
 // ── Fixtures ──────────────────────────────────────────────────────────────────
@@ -29,10 +24,7 @@ const miniSoc2: ComplianceFramework = {
   ],
 };
 
-const makeStatus = (
-  controlId: string,
-  status: ControlStatus["status"],
-): ControlStatus => ({
+const makeStatus = (controlId: string, status: ControlStatus["status"]): ControlStatus => ({
   frameworkId: "soc2",
   controlId,
   status,
@@ -71,7 +63,7 @@ describe("computeGap", () => {
     expect(report.frameworkId).toBe("soc2");
     expect(report.failingControls).toHaveLength(2);
     expect(report.failingControls.map((c) => c.id)).toEqual(
-      expect.arrayContaining(["soc2-cc6.2", "soc2-cc6.3"]),
+      expect.arrayContaining(["soc2-cc6.2", "soc2-cc6.3"])
     );
   });
 
@@ -87,7 +79,7 @@ describe("computeGap", () => {
 
     expect(report.partialControls).toHaveLength(2);
     expect(report.partialControls.map((c) => c.id)).toEqual(
-      expect.arrayContaining(["soc2-cc6.3", "soc2-cc7.2"]),
+      expect.arrayContaining(["soc2-cc6.3", "soc2-cc7.2"])
     );
   });
 
@@ -100,7 +92,7 @@ describe("computeGap", () => {
     // cc6.2, cc6.3, cc7.2 have no status entry — they are failing gaps
     expect(report.failingControls).toHaveLength(3);
     expect(report.failingControls.map((c) => c.id)).toEqual(
-      expect.arrayContaining(["soc2-cc6.2", "soc2-cc6.3", "soc2-cc7.2"]),
+      expect.arrayContaining(["soc2-cc6.2", "soc2-cc6.3", "soc2-cc7.2"])
     );
   });
 
@@ -120,9 +112,7 @@ describe("computeGap", () => {
   });
 
   it("returns empty gap arrays when all controls are passing", () => {
-    const statuses: ControlStatus[] = miniSoc2.controls.map((c) =>
-      makeStatus(c.id, "passing"),
-    );
+    const statuses: ControlStatus[] = miniSoc2.controls.map((c) => makeStatus(c.id, "passing"));
 
     const report = computeGap(statuses, miniSoc2);
 
@@ -162,7 +152,7 @@ describe("computeGap", () => {
 
     // soc2-cc6.2 has no soc2 status, so it should be a failing gap
     expect(report.failingControls.map((c) => c.id)).toEqual(
-      expect.arrayContaining(["soc2-cc6.2", "soc2-cc6.3", "soc2-cc7.2"]),
+      expect.arrayContaining(["soc2-cc6.2", "soc2-cc6.3", "soc2-cc7.2"])
     );
   });
 });
