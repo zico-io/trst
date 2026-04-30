@@ -1,0 +1,54 @@
+export const metadata = {
+  title: "Access Control Policy",
+  lastReviewed: "2026-01-15",
+  frameworks: ["hipaa", "soc2", "iso27001"],
+};
+
+# Access Control Policy
+
+**Last reviewed:** January 15, 2026
+
+## Purpose
+
+This policy establishes requirements for controlling access to Bask Health systems, applications, and data to ensure that only authorized individuals can access resources appropriate to their role.
+
+## Scope
+
+This policy applies to all Bask Health employees, contractors, vendors, and any third parties who have been granted access to Bask Health systems or data.
+
+## Principles
+
+Access control at Bask Health follows the principle of **least privilege** — users are granted only the permissions they need to perform their job function, and no more.
+
+## Requirements
+
+### User Access Management
+
+- All user accounts must be provisioned through the HR onboarding process
+- Access requests require manager approval and are logged in our access request system
+- Privileged access (admin, production systems) requires additional approval from the Security team
+- Access is reviewed quarterly; unused accounts are disabled after 90 days of inactivity
+
+### Authentication
+
+- All systems must require multi-factor authentication (MFA) for interactive login
+- Passwords must meet a minimum length of 16 characters
+- Single Sign-On (SSO) is the preferred authentication method for all SaaS tools
+
+### Remote Access
+
+- VPN or zero-trust network access is required for all remote connections to internal systems
+- Remote desktop sessions must be logged and are subject to review
+
+### Termination
+
+- Access to all systems is revoked within 4 hours of employment termination
+- Privileged access is revoked immediately upon notification
+
+## Enforcement
+
+Violations of this policy may result in disciplinary action up to and including termination.
+
+---
+
+*This policy is reviewed annually or following any material change to our environment.*

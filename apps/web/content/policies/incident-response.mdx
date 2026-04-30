@@ -1,0 +1,75 @@
+export const metadata = {
+  title: "Incident Response Policy",
+  lastReviewed: "2026-03-10",
+  frameworks: ["hipaa", "soc2", "iso27001"],
+};
+
+# Incident Response Policy
+
+**Last reviewed:** March 10, 2026
+
+## Purpose
+
+This policy establishes a structured approach for detecting, responding to, and recovering from security incidents to minimize impact on Bask Health operations and patient data.
+
+## Scope
+
+This policy applies to all security incidents affecting Bask Health systems, including but not limited to: data breaches, ransomware, unauthorized access, system outages caused by malicious activity, and PHI exposure.
+
+## Incident Classification
+
+| Severity | Description | Response Time |
+|----------|-------------|---------------|
+| **P1 – Critical** | Active breach, PHI exposure, ransomware | Immediate (24/7) |
+| **P2 – High** | Suspected breach, significant system compromise | Within 1 hour |
+| **P3 – Medium** | Anomalous behavior, policy violation | Within 4 hours |
+| **P4 – Low** | Minor policy violation, unsuccessful attack | Within 24 hours |
+
+## Response Phases
+
+### 1. Detection & Triage
+
+- Security alerts are monitored 24/7 via our SIEM platform
+- Any team member who suspects a security incident must report it immediately to security@bask.health or via Slack #security-incidents
+- The on-call security engineer triages and classifies the incident within 30 minutes
+
+### 2. Containment
+
+- Affected systems are isolated to prevent lateral movement
+- Credentials suspected of compromise are immediately rotated
+- Network segmentation is applied as needed
+
+### 3. Investigation & Eradication
+
+- Root cause analysis is performed to identify the attack vector
+- All affected systems are forensically imaged before remediation
+- Malware, backdoors, and unauthorized access paths are removed
+
+### 4. Recovery
+
+- Systems are restored from verified clean backups or rebuilt from infrastructure-as-code
+- Enhanced monitoring is applied to restored systems for 30 days post-incident
+
+### 5. Notification
+
+**HIPAA Breach Notification:**
+- Individuals affected by a PHI breach are notified within 60 days of discovery
+- HHS is notified per HIPAA Breach Notification Rule timelines
+- If more than 500 individuals are affected, prominent media outlets in the affected state are also notified
+
+**Customer Notification:**
+- Enterprise customers are notified within 72 hours of a confirmed breach affecting their data
+
+### 6. Post-Incident Review
+
+- A blameless post-mortem is conducted within 5 business days
+- Findings and corrective actions are documented and tracked to completion
+
+## Contact
+
+**Security Team:** security@bask.health  
+**24/7 Incident Hotline:** Available in the internal security runbook
+
+---
+
+*This policy is reviewed annually and after every P1 or P2 incident.*
