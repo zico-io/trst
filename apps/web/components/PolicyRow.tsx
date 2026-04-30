@@ -1,6 +1,6 @@
-"use client";
 // apps/web/components/PolicyRow.tsx
 import type { PolicyLink } from "@/lib/types";
+import { cn } from "@trst/ui";
 import Link from "next/link";
 
 interface PolicyRowProps {
@@ -159,31 +159,16 @@ export function PolicyRow({ policy }: PolicyRowProps) {
   return (
     <Link
       href={`/policies/${policy.slug}`}
-      className="group flex items-center gap-3 px-4 py-3 rounded-lg transition-colors duration-100"
-      style={{
-        backgroundColor: "var(--color-surface)",
-        border: "1px solid var(--color-border)",
-      }}
-      onMouseEnter={(e) => {
-        (e.currentTarget as HTMLAnchorElement).style.borderColor =
-          "var(--color-accent)";
-        (e.currentTarget as HTMLAnchorElement).style.backgroundColor =
-          "var(--color-surface-hover)";
-      }}
-      onMouseLeave={(e) => {
-        (e.currentTarget as HTMLAnchorElement).style.borderColor =
-          "var(--color-border)";
-        (e.currentTarget as HTMLAnchorElement).style.backgroundColor =
-          "var(--color-surface)";
-      }}
+      className={cn(
+        "group flex items-center gap-3 px-4 py-3 rounded-lg transition-colors duration-100",
+        "bg-[var(--color-surface)] border border-[var(--color-border)]",
+        "hover:bg-[var(--color-surface-hover)] hover:border-[var(--color-accent)]"
+      )}
     >
       <span style={{ color: "var(--color-accent)" }} className="flex-shrink-0">
         <PolicyIcon name={policy.icon} />
       </span>
-      <span
-        style={{ color: "var(--color-text-primary)" }}
-        className="flex-1 text-sm font-medium"
-      >
+      <span style={{ color: "var(--color-text-primary)" }} className="flex-1 text-sm font-medium">
         {policy.title}
       </span>
       <span
