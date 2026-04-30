@@ -1,6 +1,6 @@
 /* apps/web/app/globals.css */
 @import "tailwindcss";
-@source "../../packages/ui/src";
+@source "../../../packages/ui/src";
 
 :root {
   --color-bg: #0f1117;
