@@ -1,0 +1,70 @@
+/* apps/web/app/globals.css */
+@import "tailwindcss";
+
+:root {
+  --color-bg: #0f1117;
+  --color-surface: #13181f;
+  --color-surface-hover: #1a2030;
+  --color-border: #1f2937;
+  --color-border-subtle: #111827;
+  --color-text-primary: #f9fafb;
+  --color-text-secondary: #9ca3af;
+  --color-text-muted: #6b7280;
+  --color-accent: #6366f1;
+  --color-accent-hover: #4f46e5;
+  --color-green: #10b981;
+  --color-green-border: #064e3b;
+  --color-green-bg: #052e16;
+  --color-amber: #f59e0b;
+}
+
+html,
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+  font-family:
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Hidden scrollbar utility used by NavLinkRow */
+.scrollbar-none {
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+/* Edge fade mask for scrollable nav row */
+.fade-edges {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0px,
+    black 24px,
+    black calc(100% - 24px),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0px,
+    black 24px,
+    black calc(100% - 24px),
+    transparent 100%
+  );
+}
+
+/* Nav link hover styles (used by NavLinkRow — keeps it a Server Component) */
+.nav-link {
+  color: var(--color-text-secondary);
+}
+.nav-link:hover {
+  background-color: var(--color-surface-hover);
+  color: var(--color-text-primary);
+}
