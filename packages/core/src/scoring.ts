@@ -36,6 +36,10 @@ export function scoreFramework(
       case "not-applicable":
         notApplicable++;
         break;
+      default: {
+        const _exhaustive: never = s.status;
+        throw new Error(`Unhandled control status: ${_exhaustive}`);
+      }
     }
   }
 
