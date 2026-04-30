@@ -1,4 +1,4 @@
-const port = process.env.PORT ? parseInt(process.env.PORT) : 3001;
+const port = process.env.PORT ? Number.parseInt(process.env.PORT) : 3001;
 
 const server = Bun.serve({
   port,
