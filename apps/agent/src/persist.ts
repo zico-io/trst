@@ -1,5 +1,3 @@
-import { db, findings, controlStatuses, auditRuns } from "@trst/db";
-import { eq, sql } from "drizzle-orm";
 import type { MappedFinding } from "./types";
 import type { AuditRunStatus } from "@trst/shared";
 
@@ -21,6 +19,9 @@ export async function persistMappedFindings(
   mappedFindings: MappedFinding[]
 ): Promise<void> {
   if (mappedFindings.length === 0) return;
+
+  const { db, findings, controlStatuses } = await import("@trst/db");
+  const { sql } = await import("drizzle-orm");
 
   // Upsert findings — conflict on hash column (no controlId column in schema)
   await db
@@ -88,6 +89,9 @@ export async function updateAuditRunStatus(
   status: AuditRunStatus,
   completedAt?: Date
 ): Promise<void> {
+  const { db, auditRuns } = await import("@trst/db");
+  const { eq } = await import("drizzle-orm");
+
   await db
     .update(auditRuns)
     .set({
@@ -98,6 +102,8 @@ export async function updateAuditRunStatus(
 }
 
 export async function createAuditRun(repoId: string): Promise<string> {
+  const { db, auditRuns } = await import("@trst/db");
+
   const [row] = await db
     .insert(auditRuns)
     .values({ repoId, status: "pending" })
