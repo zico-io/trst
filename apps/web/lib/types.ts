@@ -6,7 +6,6 @@ export interface FrameworkDisplayCard {
   id: FrameworkId;
   name: string;
   abbreviation: string;
-  emoji: string;
   badgeColor: string;
   status: FrameworkStatus;
   percentage: number;

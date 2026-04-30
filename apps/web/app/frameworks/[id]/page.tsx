@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { FrameworkBadgeIcon } from "@/components/FrameworkBadgeIcon";
 import { mockTrustCenterData } from "@/lib/mock-data";
 
 export async function generateStaticParams() {
@@ -58,7 +59,7 @@ export default async function FrameworkDetailPage({
           className={`${framework.badgeColor} rounded-xl flex flex-col items-center justify-center gap-1 text-white`}
           style={{ width: 56, height: 68 }}
         >
-          <span className="text-2xl leading-none">{framework.emoji}</span>
+          <FrameworkBadgeIcon id={framework.id} size={28} />
           <span className="text-[10px] font-bold tracking-wide leading-none opacity-90">
             {framework.abbreviation}
           </span>

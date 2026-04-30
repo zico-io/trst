@@ -2,6 +2,7 @@
 import type { FrameworkDisplayCard } from "@/lib/types";
 import { Badge, Card, Progress, cn } from "@trst/ui";
 import Link from "next/link";
+import { FrameworkBadgeIcon } from "./FrameworkBadgeIcon";
 
 interface FrameworkCardProps {
   framework: FrameworkDisplayCard;
@@ -33,13 +34,13 @@ export function FrameworkCard({ framework }: FrameworkCardProps) {
         }
       >
         <div className="flex items-start gap-4">
-          {/* Emoji badge */}
+          {/* Badge icon */}
           <div className="relative flex-shrink-0">
             <div
-              className={`${framework.badgeColor} rounded-lg flex flex-col items-center justify-center gap-0.5 text-white`}
+              className={`${framework.badgeColor} rounded-lg flex flex-col items-center justify-center gap-1 text-white`}
               style={{ width: 44, height: 52 }}
             >
-              <span className="text-xl leading-none">{framework.emoji}</span>
+              <FrameworkBadgeIcon id={framework.id} size={22} />
               <span className="text-[9px] font-bold tracking-wide leading-none opacity-90">
                 {framework.abbreviation}
               </span>
