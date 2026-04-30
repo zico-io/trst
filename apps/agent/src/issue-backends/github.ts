@@ -1,5 +1,4 @@
 import { Octokit } from "@octokit/rest";
-import type { IssueBackend } from "./index";
 import type { RawFinding } from "../types";
 
 const SEVERITY_LABEL: Record<string, string> = {
@@ -24,7 +23,7 @@ export function parseIssueNumber(issueUrl: string): number {
   return Number(match[1]);
 }
 
-export class GitHubBackend implements IssueBackend {
+export class GitHubBackend {
   private octokit: Octokit;
   private owner: string;
   private repo: string;

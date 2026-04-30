@@ -1,5 +1,4 @@
 import { LinearClient } from "@linear/sdk";
-import type { IssueBackend } from "./index";
 import type { RawFinding } from "../types";
 
 const SEVERITY_PRIORITY: Record<string, number> = {
@@ -18,7 +17,7 @@ export function formatLinearDescription(finding: RawFinding): string {
   return `## Compliance Finding\n\n**Severity:** ${finding.severity}\n**Category:** ${finding.category}\n\n### Detail\n\n${finding.detail}`;
 }
 
-export class LinearBackend implements IssueBackend {
+export class LinearBackend {
   private client: LinearClient;
   private teamId: string;
 
