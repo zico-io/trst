@@ -41,7 +41,7 @@ export async function runCodeAuditor(
         const { data } = await octokit.repos.getContent({
           owner,
           repo,
-          path: item.path!,
+          path: item.path ?? "",
         });
         if (!Array.isArray(data) && data.type === "file" && data.content) {
           const decoded = Buffer.from(data.content, "base64").toString("utf-8").slice(0, 50_000);

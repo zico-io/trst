@@ -83,7 +83,7 @@ export async function runProcessAuditor(
       severity: "medium",
       category: "process",
       title: "No GitHub Actions workflows detected",
-      detail: `No CI/CD workflows are configured in this repository. Automated testing and security scanning are key controls under SOC 2 CC8.1 and HIPAA § 164.306(a)(1).`,
+      detail: "No CI/CD workflows are configured in this repository. Automated testing and security scanning are key controls under SOC 2 CC8.1 and HIPAA § 164.306(a)(1).",
     });
   }
 
@@ -114,7 +114,7 @@ export async function runProcessAuditor(
       severity: "low",
       category: "process",
       title: "Dependabot not configured",
-      detail: `No .github/dependabot.yml was found. Automated dependency updates reduce the attack surface from known vulnerable packages, supporting SOC 2 CC6.8 and ISO 27001 A.12.6.1.`,
+      detail: "No .github/dependabot.yml was found. Automated dependency updates reduce the attack surface from known vulnerable packages, supporting SOC 2 CC6.8 and ISO 27001 A.12.6.1.",
     });
   }
 
