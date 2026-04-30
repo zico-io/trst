@@ -9,6 +9,8 @@
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
+    "dev:web": "turbo dev --filter=@trst/web",
+    "dev:agent": "turbo dev --filter=@trst/agent",
     "lint": "turbo lint",
     "typecheck": "turbo typecheck",
     "format": "biome format --write ."
