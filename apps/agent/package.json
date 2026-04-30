@@ -2,19 +2,24 @@
   "name": "@trst/agent",
   "version": "0.0.1",
   "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "bun run --watch src/index.ts",
+    "dev": "bun run --hot src/index.ts",
+    "start": "bun run src/index.ts",
     "build": "bun build src/index.ts --outdir dist --target bun",
-    "start": "bun dist/index.js",
     "lint": "biome lint ./src",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "bun test"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.36.0",
-    "@trst/db": "*",
-    "@trst/shared": "*"
+    "@anthropic-ai/sdk": "^0.36.3",
+    "@linear/sdk": "^37.0.0",
+    "@octokit/rest": "^21.0.2",
+    "@trst/db": "workspace:*",
+    "@trst/shared": "workspace:*"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.9.4",
     "@types/bun": "latest",
     "bun-types": "latest",
     "typescript": "*"
