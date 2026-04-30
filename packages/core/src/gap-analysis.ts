@@ -1,0 +1,81 @@
+import type {
+  ComplianceFramework,
+  Control,
+  ControlStatus,
+  Finding,
+  FrameworkScore,
+} from "@trst/shared";
+import { scoreFramework } from "./scoring";
+
+export interface GapReport {
+  frameworkId: string;
+  failingControls: Control[];
+  partialControls: Control[];
+  score: FrameworkScore;
+}
+
+/**
+ * Computes a gap report for a framework by cross-referencing control statuses
+ * against the framework catalog.
+ *
+ * Controls with no status entry are treated as failing (unassessed gap).
+ * Controls marked not-applicable are excluded from both gap lists.
+ *
+ * @param controlStatuses - All control statuses (may include other frameworks).
+ * @param framework - The framework catalog to compare against.
+ */
+export function computeGap(
+  controlStatuses: ControlStatus[],
+  framework: ComplianceFramework,
+): GapReport {
+  const statusByControlId = new Map<string, ControlStatus["status"]>();
+
+  for (const s of controlStatuses) {
+    if (s.frameworkId === framework.id) {
+      statusByControlId.set(s.controlId, s.status);
+    }
+  }
+
+  const failingControls: Control[] = [];
+  const partialControls: Control[] = [];
+
+  for (const control of framework.controls) {
+    const status = statusByControlId.get(control.id);
+
+    if (status === "failing" || status === undefined) {
+      failingControls.push(control);
+    } else if (status === "partial") {
+      partialControls.push(control);
+    }
+    // "passing" and "not-applicable" are intentionally not added to gap lists
+  }
+
+  const score = scoreFramework(controlStatuses, framework.id);
+
+  return {
+    frameworkId: framework.id,
+    failingControls,
+    partialControls,
+    score,
+  };
+}
+
+/**
+ * Removes duplicate findings by SHA-256 hash, keeping the first occurrence
+ * in insertion order.
+ *
+ * @param findings - Array of findings that may contain hash duplicates.
+ */
+export function deduplicateFindings(findings: Finding[]): Finding[] {
+  const seen = new Set<string>();
+  const result: Finding[] = [];
+
+  for (const finding of findings) {
+    if (!seen.has(finding.hash)) {
+      seen.add(finding.hash);
+      result.push(finding);
+    }
+  }
+
+  return result;
+}
