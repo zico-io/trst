@@ -7,3 +7,12 @@ dist/
 .env*.local
 *.env
 .superpowers/
+
+# Terraform / OpenTofu
+.terraform/
+.terraform.lock.hcl
+*.tfstate
+*.tfstate.*
+.tfvars
+*.tfvars
+crash.log
