@@ -16,7 +16,8 @@
     "@linear/sdk": "^37.0.0",
     "@octokit/rest": "^21.0.2",
     "@trst/db": "workspace:*",
-    "@trst/shared": "workspace:*"
+    "@trst/shared": "workspace:*",
+    "drizzle-orm": "^0.38.0"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
