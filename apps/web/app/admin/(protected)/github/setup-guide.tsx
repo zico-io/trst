@@ -7,7 +7,7 @@ interface Step {
   heading: string;
   detail?: string;
   code?: string;
-  codeColor?: string;
+  codeHref?: string;
   dimmed?: boolean;
 }
 
@@ -29,6 +29,12 @@ const dotStyle = {
   },
 } as const;
 
+const codeBlockStyle = {
+  backgroundColor: "var(--color-bg)",
+  border: "1px solid var(--color-border)",
+  color: "var(--color-text-secondary)",
+};
+
 export function SetupGuide({ baseUrl }: Props) {
   const steps: Step[] = [
     {
@@ -36,19 +42,19 @@ export function SetupGuide({ baseUrl }: Props) {
       heading: "Create a GitHub App",
       detail: "Go to GitHub → Settings → Developer settings → GitHub Apps → New GitHub App.",
       code: "github.com/settings/apps/new",
-      codeColor: "var(--color-accent)",
+      codeHref: "https://github.com/settings/apps/new",
     },
     {
       n: 2,
       heading: "Set the Setup URL",
       detail: "GitHub calls this endpoint after the app is installed.",
-      code: `${baseUrl}/api/github/install`,
+      code: baseUrl ? `${baseUrl}/api/github/install` : undefined,
     },
     {
       n: 3,
       heading: "Set OAuth Callback URL",
       detail: "Required for the admin login flow.",
-      code: `${baseUrl}/api/auth/callback/github`,
+      code: baseUrl ? `${baseUrl}/api/auth/callback/github` : undefined,
     },
     {
       n: 4,
@@ -84,7 +90,14 @@ export function SetupGuide({ baseUrl }: Props) {
         Setup Guide
       </h2>
 
-      <ol className="relative" style={{ paddingLeft: "0" }}>
+      {!baseUrl && (
+        <p className="text-xs mb-4" style={{ color: "var(--color-text-muted)" }}>
+          Set <code className="font-mono">NEXTAUTH_URL</code> to see your callback URLs.
+        </p>
+      )}
+
+      {/* top: 20px aligns to centre of first dot (w-5 h-5 = 20px tall) */}
+      <ol aria-label="GitHub App setup steps" className="relative" style={{ paddingLeft: "0" }}>
         <div
           className="absolute"
           style={{
@@ -128,18 +141,25 @@ export function SetupGuide({ baseUrl }: Props) {
                     {step.detail}
                   </p>
                 )}
-                {step.code && (
-                  <code
-                    className="block text-[10px] rounded px-2 py-1 break-all"
-                    style={{
-                      backgroundColor: "var(--color-bg)",
-                      border: "1px solid var(--color-border)",
-                      color: step.codeColor ?? "var(--color-text-secondary)",
-                    }}
-                  >
-                    {step.code}
-                  </code>
-                )}
+                {step.code &&
+                  (step.codeHref ? (
+                    <a
+                      href={step.codeHref}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="block text-[10px] rounded px-2 py-1 break-all hover:opacity-80 transition-opacity"
+                      style={{ ...codeBlockStyle, color: "var(--color-accent)" }}
+                    >
+                      {step.code}
+                    </a>
+                  ) : (
+                    <code
+                      className="block text-[10px] rounded px-2 py-1 break-all"
+                      style={codeBlockStyle}
+                    >
+                      {step.code}
+                    </code>
+                  ))}
               </div>
             </li>
           );

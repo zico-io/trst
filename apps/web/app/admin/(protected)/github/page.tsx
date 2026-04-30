@@ -60,7 +60,7 @@ export default async function GitHubPage({
         </div>
       )}
 
-      <div className="grid gap-6 items-start" style={{ gridTemplateColumns: "1fr 340px" }}>
+      <div className="grid grid-cols-[1fr_340px] gap-6 items-start">
         <section
           className="rounded-xl border p-6 space-y-4"
           style={{
