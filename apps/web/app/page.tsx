@@ -16,9 +16,9 @@ export default function TrustCenterPage() {
       <Hero lastScannedMinutesAgo={data.lastScannedMinutesAgo} />
 
       {/* 2. Compliance Frameworks */}
-      <section className="px-6 sm:px-10 lg:px-16 py-10">
+      <section className="px-6 sm:px-10 lg:px-16 py-7">
         <h2
-          className="text-xs font-semibold uppercase tracking-widest mb-5"
+          className="text-xs font-semibold uppercase tracking-widest mb-4"
           style={{ color: "var(--color-text-muted)" }}
         >
           Compliance Frameworks
@@ -36,11 +36,11 @@ export default function TrustCenterPage() {
       {/* 4. Policies section */}
       <section
         id="policies"
-        className="px-6 sm:px-10 lg:px-16 py-10"
+        className="px-6 sm:px-10 lg:px-16 py-7"
         style={{ scrollMarginTop: "1rem" }}
       >
         <h2
-          className="text-xs font-semibold uppercase tracking-widest mb-5"
+          className="text-xs font-semibold uppercase tracking-widest mb-4"
           style={{ color: "var(--color-text-muted)" }}
         >
           Policies

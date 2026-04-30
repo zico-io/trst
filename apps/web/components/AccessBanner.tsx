@@ -4,7 +4,7 @@ import { Button } from "@trst/ui";
 export function AccessBanner() {
   return (
     <section
-      className="mx-6 sm:mx-10 lg:mx-16 my-10 rounded-xl px-6 py-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+      className="mx-6 sm:mx-10 lg:mx-16 my-6 rounded-xl px-6 py-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
       style={{
         backgroundColor: "var(--color-surface)",
         border: "1px solid var(--color-border)",

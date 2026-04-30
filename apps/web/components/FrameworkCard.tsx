@@ -18,7 +18,7 @@ export function FrameworkCard({ framework }: FrameworkCardProps) {
   return (
     <Link href={`/frameworks/${framework.id}`} className="block transition-opacity hover:opacity-90">
       <Card
-        className="p-5 rounded-xl"
+        className="p-4 rounded-xl"
         style={
           isCertified
             ? {
