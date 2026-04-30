@@ -1,6 +1,5 @@
 import Anthropic from "@anthropic-ai/sdk";
-import { db } from "@trst/db";
-import { policies } from "@trst/db/schema";
+import { db, policies } from "@trst/db";
 import type { RawFinding, AuditorResult } from "../types";
 
 // The canonical control IDs we check coverage for across all frameworks
