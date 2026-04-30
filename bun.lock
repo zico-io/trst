@@ -36,6 +36,7 @@
         "@mdx-js/react": "^3.1.1",
         "@next/mdx": "^16.2.4",
         "@trst/shared": "*",
+        "@trst/ui": "*",
         "next": "^15.3.1",
         "react": "^19.1.0",
         "react-dom": "^19.1.0",
