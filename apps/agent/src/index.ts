@@ -1,16 +1,20 @@
-const port = process.env.PORT ? Number.parseInt(process.env.PORT) : 3001;
+import { router } from "./router";
+
+const PORT = Number(process.env.PORT ?? "3001");
 
 const server = Bun.serve({
-  port,
-  fetch(req) {
-    const url = new URL(req.url);
-
-    if (url.pathname === "/health") {
-      return Response.json({ status: "ok", timestamp: new Date().toISOString() });
+  port: PORT,
+  async fetch(request) {
+    try {
+      return await router(request);
+    } catch (err) {
+      console.error("[server] Unhandled error:", err);
+      return new Response(
+        JSON.stringify({ error: "Internal server error" }),
+        { status: 500, headers: { "Content-Type": "application/json" } }
+      );
     }
-
-    return new Response("Not found", { status: 404 });
   },
 });
 
-console.log(`Agent running on http://localhost:${server.port}`);
+console.log(`[agent] Listening on http://localhost:${server.port}`);
