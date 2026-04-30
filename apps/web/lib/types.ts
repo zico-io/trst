@@ -6,7 +6,6 @@ export interface FrameworkDisplayCard {
   id: FrameworkId;
   name: string;
   abbreviation: string;
-  badgeColor: string;
   status: FrameworkStatus;
   percentage: number;
   // certified only

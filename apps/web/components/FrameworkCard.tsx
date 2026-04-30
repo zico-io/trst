@@ -35,39 +35,38 @@ export function FrameworkCard({ framework }: FrameworkCardProps) {
       >
         <div className="flex items-start gap-4">
           {/* Badge icon */}
-          <div className="relative flex-shrink-0">
-            <div
-              className={`${framework.badgeColor} rounded-lg flex flex-col items-center justify-center gap-1 text-white`}
-              style={{ width: 44, height: 52 }}
-            >
-              <FrameworkBadgeIcon id={framework.id} size={22} />
-              <span className="text-[9px] font-bold tracking-wide leading-none opacity-90">
-                {framework.abbreviation}
-              </span>
+          <div className="flex-shrink-0 flex flex-col items-center gap-1.5" style={{ width: 44 }}>
+            <div className="relative">
+              <FrameworkBadgeIcon id={framework.id} size={36} />
+              {/* Green check ring overlay — certified only */}
+              {isCertified && (
+                <div
+                  className="absolute -bottom-0.5 -right-0.5 flex items-center justify-center rounded-full"
+                  style={{
+                    width: 14,
+                    height: 14,
+                    backgroundColor: "var(--color-green)",
+                    border: "2px solid var(--color-green-bg)",
+                  }}
+                >
+                  <svg width="7" height="5" viewBox="0 0 8 6" fill="none" aria-hidden="true">
+                    <path
+                      d="M1 3l2 2 4-4"
+                      stroke="white"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </div>
+              )}
             </div>
-
-            {/* Green check ring overlay — certified only */}
-            {isCertified && (
-              <div
-                className="absolute -bottom-1 -right-1 flex items-center justify-center rounded-full"
-                style={{
-                  width: 16,
-                  height: 16,
-                  backgroundColor: "var(--color-green)",
-                  border: "2px solid var(--color-green-bg)",
-                }}
-              >
-                <svg width="8" height="6" viewBox="0 0 8 6" fill="none" aria-hidden="true">
-                  <path
-                    d="M1 3l2 2 4-4"
-                    stroke="white"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </div>
-            )}
+            <span
+              style={{ color: "var(--color-text-muted)" }}
+              className="text-[9px] font-bold tracking-wide leading-none"
+            >
+              {framework.abbreviation}
+            </span>
           </div>
 
           {/* Right column */}

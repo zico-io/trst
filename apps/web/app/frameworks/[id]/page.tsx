@@ -55,15 +55,7 @@ export default async function FrameworkDetailPage({
 
       {/* Badge + title */}
       <div className="flex items-center gap-4 mb-6">
-        <div
-          className={`${framework.badgeColor} rounded-xl flex flex-col items-center justify-center gap-1 text-white`}
-          style={{ width: 56, height: 68 }}
-        >
-          <FrameworkBadgeIcon id={framework.id} size={28} />
-          <span className="text-[10px] font-bold tracking-wide leading-none opacity-90">
-            {framework.abbreviation}
-          </span>
-        </div>
+        <FrameworkBadgeIcon id={framework.id} size={52} />
         <div>
           <h1
             style={{ color: "var(--color-text-primary)" }}
