@@ -144,6 +144,27 @@ describe("computeGap", () => {
     expect(report.failingControls.map((c) => c.id)).toEqual(["soc2-cc6.3"]);
     expect(report.partialControls).toHaveLength(0);
   });
+
+  it("ignores statuses belonging to a different framework", () => {
+    const statuses: ControlStatus[] = [
+      makeStatus("soc2-cc6.1", "passing"),
+      {
+        frameworkId: "hipaa" as const,
+        controlId: "soc2-cc6.2", // same controlId, different framework
+        status: "passing",
+        score: 1,
+        lastAuditRunId: "run-1",
+        updatedAt: new Date("2026-01-01T00:00:00Z"),
+      },
+    ];
+
+    const report = computeGap(statuses, miniSoc2);
+
+    // soc2-cc6.2 has no soc2 status, so it should be a failing gap
+    expect(report.failingControls.map((c) => c.id)).toEqual(
+      expect.arrayContaining(["soc2-cc6.2", "soc2-cc6.3", "soc2-cc7.2"]),
+    );
+  });
 });
 
 // ── deduplicateFindings ────────────────────────────────────────────────────────

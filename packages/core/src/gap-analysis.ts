@@ -3,12 +3,13 @@ import type {
   Control,
   ControlStatus,
   Finding,
+  FrameworkId,
   FrameworkScore,
 } from "@trst/shared";
 import { scoreFramework } from "./scoring";
 
 export interface GapReport {
-  frameworkId: string;
+  frameworkId: FrameworkId;
   failingControls: Control[];
   partialControls: Control[];
   score: FrameworkScore;
@@ -22,6 +23,7 @@ export interface GapReport {
  * Controls marked not-applicable are excluded from both gap lists.
  *
  * @param controlStatuses - All control statuses (may include other frameworks).
+ *   If duplicate (controlId, frameworkId) pairs are present, the last occurrence wins.
  * @param framework - The framework catalog to compare against.
  */
 export function computeGap(
@@ -42,12 +44,28 @@ export function computeGap(
   for (const control of framework.controls) {
     const status = statusByControlId.get(control.id);
 
-    if (status === "failing" || status === undefined) {
+    if (status === undefined) {
+      // No status entry means unassessed — treated as a failing gap
       failingControls.push(control);
-    } else if (status === "partial") {
-      partialControls.push(control);
+      continue;
     }
-    // "passing" and "not-applicable" are intentionally not added to gap lists
+
+    switch (status) {
+      case "failing":
+        failingControls.push(control);
+        break;
+      case "partial":
+        partialControls.push(control);
+        break;
+      case "passing":
+      case "not-applicable":
+        // Excluded from gap lists
+        break;
+      default: {
+        const _exhaustive: never = status;
+        throw new Error(`Unhandled control status in gap analysis: ${_exhaustive}`);
+      }
+    }
   }
 
   const score = scoreFramework(controlStatuses, framework.id);
