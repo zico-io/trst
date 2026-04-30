@@ -35,9 +35,9 @@ export function FrameworkCard({ framework }: FrameworkCardProps) {
       >
         <div className="flex items-start gap-4">
           {/* Badge icon */}
-          <div className="flex-shrink-0 flex flex-col items-center gap-1.5" style={{ width: 44 }}>
+          <div className="flex-shrink-0 relative">
             <div className="relative">
-              <FrameworkBadgeIcon id={framework.id} size={36} />
+              <FrameworkBadgeIcon id={framework.id} size={44} />
               {/* Green check ring overlay — certified only */}
               {isCertified && (
                 <div
