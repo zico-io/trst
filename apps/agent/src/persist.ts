@@ -4,10 +4,10 @@ import type { AuditRunStatus, StepName, StepStatus, RunStep, RunMetadata } from 
 
 // Derive a stable hash for a finding so we can detect duplicates across runs
 export function hashFinding(repoId: string, frameworkId: string, controlRef: string, title: string): string {
-  const raw = `${repoId}:${frameworkId}:${controlRef}:${title}`;
+  const raw = `${repoId}\0${frameworkId}\0${controlRef}\0${title}`;
   const encoder = new TextEncoder();
   const data = encoder.encode(raw);
-  // djb2 hash — fast and deterministic for dedup within a run
+  // djb2 hash — stable across runs for the same repo+framework+control+title
   let hash = 5381;
   for (const byte of data) {
     hash = ((hash << 5) + hash) ^ byte;
