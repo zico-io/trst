@@ -1,0 +1,7 @@
+{
+  "name": "@trst/clickhouse",
+  "private": true,
+  "scripts": {
+    "dev": "cd ../../.. && docker-compose --profile observe logs --follow --tail=100 ch-server"
+  }
+}

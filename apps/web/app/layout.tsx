@@ -1,9 +1,16 @@
+// apps/web/app/layout.tsx
 import type { Metadata } from "next";
-import type React from "react";
+import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "trst - Trust Center",
-  description: "Trust center",
+  title: "Bask Health Trust Center",
+  description:
+    "Bask Health's security, compliance, and privacy posture — continuously monitored.",
+  openGraph: {
+    title: "Bask Health Trust Center",
+    description: "Built for trust in healthcare.",
+    siteName: "Bask Health",
+  },
 };
 
 export default function RootLayout({
@@ -13,7 +20,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body className="min-h-screen" style={{ backgroundColor: "var(--color-bg)" }}>
+        {children}
+      </body>
     </html>
   );
 }

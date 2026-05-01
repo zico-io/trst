@@ -12,6 +12,7 @@
     "@trst/shared": "*"
   },
   "devDependencies": {
+    "bun-types": "^1.3.13",
     "typescript": "*"
   }
 }

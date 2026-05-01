@@ -1,17 +1,21 @@
 {
   "name": "trst",
   "private": true,
-  "packageManager": "bun@1.2.0",
+  "packageManager": "bun@1.3.6",
   "workspaces": [
     "apps/*",
-    "packages/*"
+    "packages/*",
+    "packages/docker/*"
   ],
   "scripts": {
     "postinstall": "lefthook install",
     "build": "turbo build",
-    "dev": "turbo dev",
-    "dev:web": "turbo dev --filter=@trst/web",
-    "dev:agent": "turbo dev --filter=@trst/agent",
+    "dev": "docker-compose up -d --wait && bun run db:migrate && turbo dev",
+    "dev:web": "docker-compose up -d --wait && bun run db:migrate && turbo dev --filter=@trst/web",
+    "dev:agent": "docker-compose up -d --wait && bun run db:migrate && turbo dev --filter=@trst/agent",
+    "dev:observe": "bash scripts/dev-observe.sh",
+    "db:migrate": "DATABASE_URL=${DATABASE_URL:-postgresql://postgres:postgres@localhost:5432/trst_dev} bun run --cwd packages/db migrate",
+    "db:reset": "docker-compose down -v && docker-compose up -d --wait && bun run db:migrate",
     "lint": "turbo lint",
     "typecheck": "turbo typecheck",
     "format": "biome format --write ."

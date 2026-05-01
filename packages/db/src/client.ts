@@ -3,8 +3,23 @@ import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import * as schema from "./schema";
 
-const connectionString = process.env.DATABASE_URL;
-if (!connectionString) throw new Error("DATABASE_URL is required");
+type Db = ReturnType<typeof drizzle<typeof schema>>;
 
-const queryClient = postgres(connectionString);
-export const db = drizzle(queryClient, { schema });
+let _db: Db | undefined;
+
+function getDb(): Db {
+  if (!_db) {
+    const url = process.env.DATABASE_URL;
+    if (!url) throw new Error("DATABASE_URL is required");
+    _db = drizzle(postgres(url), { schema });
+  }
+  return _db;
+}
+
+// Lazy singleton — defers connection until the first query so Next.js
+// can import this module safely during static build without DATABASE_URL.
+export const db: Db = new Proxy({} as Db, {
+  get(_, prop) {
+    return Reflect.get(getDb(), prop);
+  },
+});

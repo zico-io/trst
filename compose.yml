@@ -1,0 +1,108 @@
+services:
+
+  # ── Postgres (always on) ───────────────────────────────────────────────────
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: trst_dev
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d trst_dev"]
+      interval: 2s
+      timeout: 2s
+      retries: 15
+
+  # ── ClickStack (profile: observe) ─────────────────────────────────────────
+  # Start with: bun run dev:observe
+  # UI: http://localhost:8080
+  # OTLP gRPC: localhost:4317  |  OTLP HTTP: localhost:4318
+
+  ch-server:
+    profiles: [observe]
+    image: clickhouse/clickhouse-server:26.1-alpine
+    environment:
+      CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: 1
+    volumes:
+      - ./docker/clickhouse/config.xml:/etc/clickhouse-server/config.xml
+      - ./docker/clickhouse/users.xml:/etc/clickhouse-server/users.xml
+      - ch_data:/var/lib/clickhouse
+      - ch_logs:/var/log/clickhouse-server
+    restart: on-failure
+    healthcheck:
+      test: ["CMD-SHELL", "clickhouse-client --query 'SELECT 1'"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  clickstack-mongo:
+    profiles: [observe]
+    image: mongo:5.0.32-focal
+    volumes:
+      - clickstack_mongo:/data/db
+
+  otel-collector:
+    profiles: [observe]
+    image: clickhouse/clickstack-otel-collector:2
+    environment:
+      CLICKHOUSE_ENDPOINT: "tcp://ch-server:9000?dial_timeout=10s"
+      HYPERDX_OTEL_EXPORTER_CLICKHOUSE_DATABASE: default
+      HYPERDX_LOG_LEVEL: warn
+      OPAMP_SERVER_URL: "http://hyperdx:4320"
+      HYPERDX_OTEL_EXPORTER_CREATE_LEGACY_SCHEMA: "true"
+    ports:
+      - "4317:4317"   # OTLP gRPC
+      - "4318:4318"   # OTLP HTTP
+      - "24225:24225" # Fluentd
+    restart: always
+    depends_on:
+      ch-server:
+        condition: service_healthy
+
+  hyperdx:
+    profiles: [observe]
+    image: docker.hyperdx.io/hyperdx/hyperdx:2
+    ports:
+      - "8080:8080"   # UI
+      - "8000:8000"   # API
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "require('http').get('http://localhost:8000/',r=>process.exit(0)).on('error',()=>process.exit(1))"
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+    environment:
+      FRONTEND_URL: "http://localhost:8080"
+      HYPERDX_API_PORT: 8000
+      HYPERDX_APP_PORT: 8080
+      HYPERDX_APP_URL: "http://localhost"
+      HYPERDX_LOG_LEVEL: warn
+      HYPERDX_API_KEY: dev-api-key
+      OPAMP_PORT: 4320
+      MONGO_URI: "mongodb://clickstack-mongo:27017/hyperdx"
+      SERVER_URL: "http://127.0.0.1:8000"
+      OTEL_EXPORTER_OTLP_ENDPOINT: "http://otel-collector:4318"
+      OTEL_SERVICE_NAME: "hdx-oss-app"
+      USAGE_STATS_ENABLED: "false"
+      DEFAULT_CONNECTIONS: '[{"name":"Local ClickHouse","host":"http://ch-server:8123","username":"default","password":""}]'
+      DEFAULT_SOURCES: '[{"from":{"databaseName":"default","tableName":"otel_logs"},"kind":"log","timestampValueExpression":"TimestampTime","name":"Logs","displayedTimestampValueExpression":"Timestamp","implicitColumnExpression":"Body","serviceNameExpression":"ServiceName","bodyExpression":"Body","eventAttributesExpression":"LogAttributes","resourceAttributesExpression":"ResourceAttributes","defaultTableSelectExpression":"Timestamp,ServiceName,SeverityText,Body","severityTextExpression":"SeverityText","traceIdExpression":"TraceId","spanIdExpression":"SpanId","connection":"Local ClickHouse","traceSourceId":"Traces","sessionSourceId":"Sessions","metricSourceId":"Metrics"},{"from":{"databaseName":"default","tableName":"otel_traces"},"kind":"trace","timestampValueExpression":"Timestamp","name":"Traces","displayedTimestampValueExpression":"Timestamp","implicitColumnExpression":"SpanName","serviceNameExpression":"ServiceName","eventAttributesExpression":"SpanAttributes","resourceAttributesExpression":"ResourceAttributes","defaultTableSelectExpression":"Timestamp,ServiceName,StatusCode,round(Duration\/1e6),SpanName","traceIdExpression":"TraceId","spanIdExpression":"SpanId","durationExpression":"Duration","durationPrecision":9,"parentSpanIdExpression":"ParentSpanId","spanNameExpression":"SpanName","spanKindExpression":"SpanKind","statusCodeExpression":"StatusCode","statusMessageExpression":"StatusMessage","connection":"Local ClickHouse","logSourceId":"Logs","sessionSourceId":"Sessions","metricSourceId":"Metrics"},{"from":{"databaseName":"default","tableName":""},"kind":"metric","timestampValueExpression":"TimeUnix","name":"Metrics","resourceAttributesExpression":"ResourceAttributes","metricTables":{"gauge":"otel_metrics_gauge","histogram":"otel_metrics_histogram","sum":"otel_metrics_sum"},"connection":"Local ClickHouse","logSourceId":"Logs","traceSourceId":"Traces","sessionSourceId":"Sessions"},{"from":{"databaseName":"default","tableName":"hyperdx_sessions"},"kind":"session","timestampValueExpression":"TimestampTime","name":"Sessions","displayedTimestampValueExpression":"Timestamp","implicitColumnExpression":"Body","serviceNameExpression":"ServiceName","bodyExpression":"Body","eventAttributesExpression":"LogAttributes","resourceAttributesExpression":"ResourceAttributes","defaultTableSelectExpression":"Timestamp,ServiceName,SeverityText,Body","severityTextExpression":"SeverityText","traceIdExpression":"TraceId","spanIdExpression":"SpanId","connection":"Local ClickHouse","logSourceId":"Logs","traceSourceId":"Traces","metricSourceId":"Metrics"}]'
+    depends_on:
+      ch-server:
+        condition: service_healthy
+      clickstack-mongo:
+        condition: service_started
+
+volumes:
+  postgres_data:
+  ch_data:
+  ch_logs:
+  clickstack_mongo:

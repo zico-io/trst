@@ -1,0 +1,7 @@
+{
+  "name": "@trst/postgres",
+  "private": true,
+  "scripts": {
+    "dev": "cd ../../.. && docker-compose logs --follow --tail=100 postgres"
+  }
+}

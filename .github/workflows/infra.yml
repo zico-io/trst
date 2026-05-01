@@ -1,0 +1,98 @@
+name: Infrastructure
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'infra/**'
+      - '!infra/bootstrap/**'
+      - '.github/workflows/infra.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'infra/**'
+      - '!infra/bootstrap/**'
+      - '.github/workflows/infra.yml'
+
+# Prevent concurrent state operations; never cancel an in-progress apply.
+concurrency:
+  group: infra
+  cancel-in-progress: false
+
+permissions:
+  id-token: write       # OIDC token for AWS
+  contents: read
+  pull-requests: write  # post plan as PR comment
+
+jobs:
+  plan:
+    name: Plan
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: us-east-1
+
+      - uses: opentofu/setup-opentofu@v1
+        with:
+          tofu_version: latest
+
+      - name: Init
+        run: tofu init
+        working-directory: infra
+
+      - name: Plan
+        run: tofu plan -no-color 2>&1 | tee plan.txt
+        working-directory: infra
+        env:
+          VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
+          TF_VAR_tailscale_auth_key: ${{ secrets.TAILSCALE_AUTH_KEY }}
+
+      - name: Post plan as PR comment
+        uses: actions/github-script@v7
+        if: always()
+        with:
+          script: |
+            const fs = require('fs');
+            const raw = fs.readFileSync('infra/plan.txt', 'utf8');
+            const body = raw.length > 60000
+              ? raw.slice(0, 60000) + '\n\n_(truncated — see workflow logs for full output)_'
+              : raw;
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: `## Tofu Plan\n\`\`\`\n${body}\n\`\`\``,
+            });
+
+  apply:
+    name: Apply
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    environment: production  # requires approval in GitHub repo settings → Environments
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: us-east-1
+
+      - uses: opentofu/setup-opentofu@v1
+        with:
+          tofu_version: latest
+
+      - name: Init
+        run: tofu init
+        working-directory: infra
+
+      - name: Apply
+        run: tofu apply -auto-approve
+        working-directory: infra
+        env:
+          VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
+          TF_VAR_tailscale_auth_key: ${{ secrets.TAILSCALE_AUTH_KEY }}

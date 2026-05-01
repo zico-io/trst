@@ -1,5 +1,6 @@
 /// <reference types="node" />
 import { pgEnum, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+
 import { auditRuns } from "./audit-runs";
 
 export const findingSeverityEnum = pgEnum("finding_severity", [
@@ -12,6 +13,7 @@ export const findingSeverityEnum = pgEnum("finding_severity", [
 
 export const findingStatusEnum = pgEnum("finding_status", [
   "open",
+  "in-progress",
   "resolved",
   "suppressed",
 ]);
@@ -33,4 +35,7 @@ export const findings = pgTable("findings", {
   status: findingStatusEnum("status").notNull().default("open"),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   resolvedAt: timestamp("resolved_at", { withTimezone: true }),
+  resolutionNote: text("resolution_note"),
+  claimedBy: text("claimed_by"),
+  claimedAt: timestamp("claimed_at", { withTimezone: true }),
 });

@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1777576995270,
+      "tag": "0000_lumpy_inhumans",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1777596231566,
+      "tag": "0001_same_mastermind",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1777700000000,
+      "tag": "0002_dedup_findings",
+      "breakpoints": true
+    }
+  ]
+}

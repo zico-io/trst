@@ -1,0 +1,64 @@
+export const metadata = {
+  title: "Data Retention Policy",
+  lastReviewed: "2026-02-01",
+  frameworks: ["hipaa", "gdpr"],
+};
+
+# Data Retention Policy
+
+**Last reviewed:** February 1, 2026
+
+## Purpose
+
+This policy defines how long Bask Health retains different categories of data and establishes procedures for secure disposal when data is no longer needed.
+
+## Scope
+
+This policy covers all data collected, processed, or stored by Bask Health systems, including patient health information, business records, logs, and backups.
+
+## Retention Schedules
+
+### Protected Health Information (PHI)
+
+Consistent with HIPAA requirements and applicable state laws:
+
+- **Medical records:** 7 years from the date of the last service (10 years for minors)
+- **Billing records:** 7 years
+- **Authorization forms:** 6 years from date of creation or last effective date
+
+### Business and Operational Data
+
+- **Financial records:** 7 years
+- **HR records:** Duration of employment plus 7 years
+- **Contracts and agreements:** Duration of contract plus 7 years
+- **Security incident records:** 5 years
+
+### System and Application Logs
+
+- **Access logs:** 1 year
+- **Security event logs:** 2 years
+- **Application error logs:** 90 days
+- **Audit trails:** 7 years (HIPAA requirement)
+
+### Backup Retention
+
+- **Daily backups:** Retained for 30 days
+- **Weekly backups:** Retained for 90 days
+- **Monthly backups:** Retained for 1 year
+- **Annual backups:** Retained for 7 years
+
+## Data Disposal
+
+When data reaches the end of its retention period:
+
+1. **Electronic data** is securely overwritten using NIST 800-88 compliant methods, or storage media is physically destroyed
+2. **Paper records** containing PHI are cross-cut shredded using a certified destruction vendor
+3. **Disposal is logged** with date, method, and type of data destroyed
+
+## Legal Holds
+
+Data subject to litigation holds or regulatory investigations is exempt from normal retention schedules and must not be destroyed until the hold is released by Legal.
+
+---
+
+*Questions about this policy should be directed to privacy@bask.health*
