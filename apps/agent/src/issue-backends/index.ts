@@ -1,4 +1,5 @@
 import type { RawFinding } from "../types";
+import type { ResolvedConfig } from "../config";
 import { LinearBackend } from "./linear";
 import { GitHubBackend } from "./github";
 
@@ -8,24 +9,35 @@ export interface IssueBackend {
   updateIssue(issueUrl: string, finding: RawFinding): Promise<void>;
 }
 
-export function createIssueBackend(): IssueBackend {
-  const backend = process.env.ISSUE_BACKEND ?? "linear";
+const noopBackend: IssueBackend = {
+  async createIssue() { return ""; },
+  async closeIssue() {},
+  async updateIssue() {},
+};
 
-  if (backend === "github") {
+export async function createIssueBackend(
+  config: ResolvedConfig,
+  githubToken: string
+): Promise<IssueBackend> {
+  if (config.issueBackend === "github") {
+    // Parse owner/repo from the first enabled repo — or skip if not determinable
+    // GitHub backend needs owner+repo; the token is the installation token
     const owner = process.env.GITHUB_OWNER;
     const repo = process.env.GITHUB_REPO;
-    const token = process.env.GITHUB_TOKEN;
-    if (!owner || !repo || !token) {
-      throw new Error("GITHUB_OWNER, GITHUB_REPO, and GITHUB_TOKEN are required for ISSUE_BACKEND=github");
+    if (!owner || !repo) {
+      console.warn("[issue-backend] GITHUB_OWNER/GITHUB_REPO not set; skipping issue creation");
+      return noopBackend;
     }
-    return new GitHubBackend({ owner, repo, token });
+    return new GitHubBackend({ owner, repo, token: githubToken });
   }
 
-  // Default: linear
-  const apiKey = process.env.LINEAR_API_KEY;
-  const teamId = process.env.LINEAR_TEAM_ID;
-  if (!apiKey || !teamId) {
-    throw new Error("LINEAR_API_KEY and LINEAR_TEAM_ID are required for ISSUE_BACKEND=linear");
+  if (config.issueBackend === "linear") {
+    const { linearApiKey, linearTeamId } = config;
+    if (!linearApiKey || !linearTeamId) {
+      throw new Error("LINEAR_API_KEY and LINEAR_TEAM_ID required for issue_backend=linear");
+    }
+    return new LinearBackend({ apiKey: linearApiKey, teamId: linearTeamId });
   }
-  return new LinearBackend({ apiKey, teamId });
+
+  return noopBackend;
 }

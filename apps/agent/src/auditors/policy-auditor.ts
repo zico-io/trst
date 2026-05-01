@@ -1,5 +1,6 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { db, policies } from "@trst/db";
+import { withLlmSpan } from "@trst/telemetry";
 import type { RawFinding, AuditorResult } from "../types";
 
 // The canonical control IDs we check coverage for across all frameworks
@@ -41,7 +42,7 @@ export async function runPolicyAuditor(anthropicApiKey: string): Promise<Auditor
     .map((c) => `- [${c.frameworkId}] ${c.controlId}: ${c.description}`)
     .join("\n");
 
-  const message = await anthropic.messages.create({
+  const message = await withLlmSpan({ model: "claude-sonnet-4-6", operation: "policy-audit" }, () => anthropic.messages.create({
     model: "claude-sonnet-4-6",
     max_tokens: 4096,
     messages: [
@@ -67,7 +68,7 @@ Return a JSON array. Each element must have:
 Return ONLY valid JSON — no markdown, no explanation.`,
       },
     ],
-  });
+  }));
 
   const text = message.content[0].type === "text" ? message.content[0].text : "";
   try {

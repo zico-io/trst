@@ -1,4 +1,7 @@
+import { initTelemetry } from "@trst/telemetry";
 import { router } from "./router";
+
+initTelemetry({ serviceName: process.env.OTEL_SERVICE_NAME ?? "trst-agent" });
 
 const PORT = Number(process.env.PORT ?? "3001");
 

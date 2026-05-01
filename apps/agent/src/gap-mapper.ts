@@ -1,5 +1,6 @@
 import Anthropic from "@anthropic-ai/sdk";
 import type { FrameworkId } from "@trst/shared";
+import { withLlmSpan } from "@trst/telemetry";
 import type { RawFinding, MappedFinding } from "./types";
 
 // Tool definition for structured output
@@ -117,7 +118,7 @@ export async function runGapMapper(input: GapMapperInput): Promise<MappedFinding
     )
     .join("\n\n");
 
-  const response = await anthropic.messages.create({
+  const response = await withLlmSpan({ model: "claude-sonnet-4-6", operation: "gap-map" }, () => anthropic.messages.create({
     model: "claude-sonnet-4-6",
     max_tokens: 8192,
     tools: [MAP_FINDINGS_TOOL],
@@ -136,7 +137,7 @@ ${findingsText}
 Call the map_findings tool with all findings mapped. Every finding must appear in the output — use findingIndex to reference each one.`,
       },
     ],
-  });
+  }));
 
   // Extract the tool_use block
   const toolUseBlock = response.content.find(

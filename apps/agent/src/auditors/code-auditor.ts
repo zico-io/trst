@@ -1,5 +1,6 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { Octokit } from "@octokit/rest";
+import { withLlmSpan } from "@trst/telemetry";
 import type { RawFinding, AuditorResult } from "../types";
 
 const SAMPLE_FILE_LIMIT = 20;
@@ -61,7 +62,7 @@ export async function runCodeAuditor(
 
   const sampledContent = fileContents.filter(Boolean).join("\n\n---\n\n");
 
-  const message = await anthropic.messages.create({
+  const message = await withLlmSpan({ model: "claude-sonnet-4-6", operation: "code-audit" }, () => anthropic.messages.create({
     model: "claude-sonnet-4-6",
     max_tokens: 4096,
     messages: [
@@ -86,7 +87,7 @@ Return ONLY valid JSON — no markdown, no explanation. Example:
 [{"severity":"high","title":"Hardcoded secret in config","detail":"The file config/db.ts contains a hardcoded PostgreSQL password. This exposes credentials in source control and violates least-privilege principles."}]`,
       },
     ],
-  });
+  }));
 
   let findings: RawFinding[] = [];
   const text = message.content[0].type === "text" ? message.content[0].text : "";

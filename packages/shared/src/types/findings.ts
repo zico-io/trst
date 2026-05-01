@@ -1,5 +1,5 @@
 export type FindingSeverity = "critical" | "high" | "medium" | "low" | "info";
-export type FindingStatus = "open" | "resolved" | "suppressed";
+export type FindingStatus = "open" | "in-progress" | "resolved" | "suppressed";
 export type ControlStatusValue = "passing" | "partial" | "failing" | "not-applicable";
 
 export interface Finding {

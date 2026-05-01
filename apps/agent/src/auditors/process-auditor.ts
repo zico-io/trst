@@ -26,13 +26,23 @@ export async function runProcessAuditor(
       branch: defaultBranch,
     });
     branchProtection = data;
-  } catch {
-    findings.push({
-      severity: "critical",
-      category: "process",
-      title: `No branch protection on ${defaultBranch}`,
-      detail: `The default branch "${defaultBranch}" has no branch protection rules configured. Direct pushes and force-pushes are permitted, which violates SOC 2 change management controls and HIPAA access control requirements.`,
-    });
+  } catch (err) {
+    const status = (err as { status?: number }).status;
+    if (status === 403) {
+      findings.push({
+        severity: "low",
+        category: "process",
+        title: `Branch protection status unknown — insufficient token permissions`,
+        detail: `The GitHub token does not have admin access to read branch protection rules on "${defaultBranch}". Grant the installation read access to Administration to enable this check.`,
+      });
+    } else {
+      findings.push({
+        severity: "critical",
+        category: "process",
+        title: `No branch protection on ${defaultBranch}`,
+        detail: `The default branch "${defaultBranch}" has no branch protection rules configured. Direct pushes and force-pushes are permitted, which violates SOC 2 change management controls and HIPAA access control requirements.`,
+      });
+    }
   }
 
   if (branchProtection) {
