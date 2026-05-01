@@ -27,3 +27,5 @@ jobs:
 
       - name: Build
         run: bun turbo build
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/trst
