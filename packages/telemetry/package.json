@@ -1,0 +1,24 @@
+{
+  "name": "@trst/telemetry",
+  "version": "0.0.1",
+  "private": true,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "lint": "biome lint ./src"
+  },
+  "dependencies": {
+    "@opentelemetry/api": "^1.9",
+    "@opentelemetry/api-logs": "^0.216",
+    "@opentelemetry/exporter-logs-otlp-http": "^0.216",
+    "@opentelemetry/exporter-trace-otlp-http": "^0.216",
+    "@opentelemetry/resources": "^2.7",
+    "@opentelemetry/sdk-logs": "^0.216",
+    "@opentelemetry/sdk-trace-node": "^2.7",
+    "@opentelemetry/semantic-conventions": "^1.40"
+  },
+  "devDependencies": {
+    "typescript": "*"
+  }
+}
