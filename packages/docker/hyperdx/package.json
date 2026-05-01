@@ -1,0 +1,7 @@
+{
+  "name": "@trst/hyperdx",
+  "private": true,
+  "scripts": {
+    "dev": "cd ../../.. && docker-compose --profile observe logs --follow --tail=100 hyperdx"
+  }
+}

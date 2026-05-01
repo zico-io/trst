@@ -1,0 +1,17 @@
+{
+  "name": "@trst/mcp",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "lint": "biome lint ./src"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.10.2",
+    "@trst/db": "*",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "typescript": "*"
+  }
+}
