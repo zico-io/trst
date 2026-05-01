@@ -1,5 +1,5 @@
 # Build context: repo root (needed for workspace packages)
-FROM oven/bun:1.2-slim
+FROM oven/bun:1.3.6-slim
 
 WORKDIR /app
 
@@ -9,6 +9,7 @@ COPY packages/db/package.json      ./packages/db/
 COPY packages/shared/package.json  ./packages/shared/
 COPY packages/core/package.json    ./packages/core/
 COPY packages/ui/package.json      ./packages/ui/
+COPY packages/telemetry/package.json ./packages/telemetry/
 COPY apps/agent/package.json       ./apps/agent/
 
 RUN bun install --frozen-lockfile
@@ -16,6 +17,7 @@ RUN bun install --frozen-lockfile
 # Layer 2: source (invalidated when code changes)
 COPY packages/db/src       ./packages/db/src
 COPY packages/shared/src   ./packages/shared/src
+COPY packages/telemetry/src ./packages/telemetry/src
 COPY apps/agent/src        ./apps/agent/src
 
 WORKDIR /app/apps/agent
