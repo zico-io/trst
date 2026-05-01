@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<!-- Sourced from github.com/ClickHouse/ClickStack — trimmed for local dev -->
+<clickhouse>
+    <logger>
+        <level>warning</level>
+        <console>true</console>
+        <log remove="remove" />
+        <errorlog remove="remove" />
+    </logger>
+
+    <listen_host>0.0.0.0</listen_host>
+    <http_port>8123</http_port>
+    <tcp_port>9000</tcp_port>
+    <interserver_http_host>ch-server</interserver_http_host>
+    <interserver_http_port>9009</interserver_http_port>
+
+    <max_connections>4096</max_connections>
+    <keep_alive_timeout>64</keep_alive_timeout>
+    <max_concurrent_queries>100</max_concurrent_queries>
+
+    <path>/var/lib/clickhouse/</path>
+    <tmp_path>/var/lib/clickhouse/tmp/</tmp_path>
+    <user_files_path>/var/lib/clickhouse/user_files/</user_files_path>
+
+    <user_directories>
+        <users_xml>
+            <path>users.xml</path>
+        </users_xml>
+    </user_directories>
+
+    <default_profile>default</default_profile>
+    <default_database>default</default_database>
+    <timezone>UTC</timezone>
+    <mlock_executable>false</mlock_executable>
+
+    <remote_servers>
+        <hdx_cluster>
+            <shard>
+                <replica>
+                    <host>ch-server</host>
+                    <port>9000</port>
+                </replica>
+            </shard>
+        </hdx_cluster>
+    </remote_servers>
+
+    <distributed_ddl>
+        <path>/clickhouse/task_queue/ddl</path>
+    </distributed_ddl>
+
+    <format_schema_path>/var/lib/clickhouse/format_schemas/</format_schema_path>
+</clickhouse>
