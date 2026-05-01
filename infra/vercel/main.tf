@@ -70,6 +70,22 @@ resource "vercel_project_environment_variable" "admin_github_logins" {
   sensitive  = false
 }
 
+resource "vercel_project_environment_variable" "field_encryption_key" {
+  project_id = vercel_project.web.id
+  key        = "FIELD_ENCRYPTION_KEY"
+  value      = var.field_encryption_key
+  target     = ["production", "preview"]
+  sensitive  = true
+}
+
+resource "vercel_project_environment_variable" "install_state_secret" {
+  project_id = vercel_project.web.id
+  key        = "INSTALL_STATE_SECRET"
+  value      = var.install_state_secret
+  target     = ["production", "preview"]
+  sensitive  = true
+}
+
 resource "vercel_project_environment_variable" "otel_endpoint" {
   count      = var.otel_exporter_otlp_endpoint != "" ? 1 : 0
   project_id = vercel_project.web.id

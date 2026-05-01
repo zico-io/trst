@@ -36,6 +36,16 @@ variable "revalidate_secret" {
   sensitive = true
 }
 
+variable "field_encryption_key" {
+  type      = string
+  sensitive = true
+}
+
+variable "install_state_secret" {
+  type      = string
+  sensitive = true
+}
+
 variable "otel_exporter_otlp_endpoint" {
   type    = string
   default = ""

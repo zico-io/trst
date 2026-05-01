@@ -154,6 +154,7 @@ resource "aws_iam_role_policy" "execution_secrets" {
           var.database_url_secret_arn,
           var.agent_api_key_arn,
           var.revalidate_secret_arn,
+          var.field_encryption_key_arn,
         ],
         var.otel_exporter_otlp_endpoint != "" ? [var.otel_headers_arn] : []
       )
@@ -210,9 +211,10 @@ resource "aws_ecs_task_definition" "agent" {
 
     secrets = concat(
       [
-        { name = "DATABASE_URL",      valueFrom = var.database_url_secret_arn },
-        { name = "AGENT_API_KEY",     valueFrom = var.agent_api_key_arn },
-        { name = "REVALIDATE_SECRET", valueFrom = var.revalidate_secret_arn },
+        { name = "DATABASE_URL",           valueFrom = var.database_url_secret_arn },
+        { name = "AGENT_API_KEY",          valueFrom = var.agent_api_key_arn },
+        { name = "REVALIDATE_SECRET",      valueFrom = var.revalidate_secret_arn },
+        { name = "FIELD_ENCRYPTION_KEY",   valueFrom = var.field_encryption_key_arn },
       ],
       var.otel_exporter_otlp_endpoint != "" ? [
         { name = "OTEL_EXPORTER_OTLP_HEADERS", valueFrom = var.otel_headers_arn },

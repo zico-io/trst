@@ -55,6 +55,15 @@ resource "random_password" "hyperdx_api_key" {
   special = false
 }
 
+resource "random_bytes" "field_encryption_key" {
+  length = 32
+}
+
+resource "random_password" "install_state_secret" {
+  length  = 32
+  special = false
+}
+
 
 resource "aws_secretsmanager_secret" "otel_headers" {
   name                    = "/trst/${var.environment}/otel_exporter_otlp_headers"
@@ -64,6 +73,26 @@ resource "aws_secretsmanager_secret" "otel_headers" {
 resource "aws_secretsmanager_secret_version" "otel_headers" {
   secret_id     = aws_secretsmanager_secret.otel_headers.id
   secret_string = "authorization=${random_password.hyperdx_api_key.result}"
+}
+
+resource "aws_secretsmanager_secret" "field_encryption_key" {
+  name                    = "/trst/${var.environment}/field_encryption_key"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "field_encryption_key" {
+  secret_id     = aws_secretsmanager_secret.field_encryption_key.id
+  secret_string = random_bytes.field_encryption_key.hex
+}
+
+resource "aws_secretsmanager_secret" "install_state_secret" {
+  name                    = "/trst/${var.environment}/install_state_secret"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "install_state_secret" {
+  secret_id     = aws_secretsmanager_secret.install_state_secret.id
+  secret_string = random_password.install_state_secret.result
 }
 
 # ── Outputs ───────────────────────────────────────────────────────────────────
@@ -113,4 +142,22 @@ output "hyperdx_api_key" {
 output "otel_headers" {
   value     = "authorization=${random_password.hyperdx_api_key.result}"
   sensitive = true
+}
+
+output "field_encryption_key" {
+  value     = random_bytes.field_encryption_key.hex
+  sensitive = true
+}
+
+output "field_encryption_key_arn" {
+  value = aws_secretsmanager_secret.field_encryption_key.arn
+}
+
+output "install_state_secret" {
+  value     = random_password.install_state_secret.result
+  sensitive = true
+}
+
+output "install_state_secret_arn" {
+  value = aws_secretsmanager_secret.install_state_secret.arn
 }

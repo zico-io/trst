@@ -67,3 +67,8 @@ variable "otel_headers_arn" {
   description = "Secrets Manager ARN for OTEL_EXPORTER_OTLP_HEADERS"
   default     = ""
 }
+
+variable "field_encryption_key_arn" {
+  type        = string
+  description = "Secrets Manager ARN for FIELD_ENCRYPTION_KEY"
+}

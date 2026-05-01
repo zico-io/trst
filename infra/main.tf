@@ -76,6 +76,7 @@ module "compute" {
   database_url_secret_arn     = module.data.database_url_secret_arn
   agent_api_key_arn           = module.secrets.agent_api_key_arn
   revalidate_secret_arn       = module.secrets.revalidate_secret_arn
+  field_encryption_key_arn    = module.secrets.field_encryption_key_arn
   revalidate_url              = var.revalidate_url
   github_owner                = var.github_owner
   github_repo                 = var.github_repo
@@ -91,6 +92,8 @@ module "vercel" {
   agent_api_key               = module.secrets.agent_api_key
   admin_github_logins         = var.admin_github_logins
   revalidate_secret           = module.secrets.revalidate_secret
+  field_encryption_key        = module.secrets.field_encryption_key
+  install_state_secret        = module.secrets.install_state_secret
   otel_exporter_otlp_endpoint = module.observability.otlp_endpoint
   otel_exporter_otlp_headers  = module.secrets.otel_headers
 }
