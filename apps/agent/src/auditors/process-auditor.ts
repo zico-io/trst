@@ -32,7 +32,7 @@ export async function runProcessAuditor(
       findings.push({
         severity: "low",
         category: "process",
-        title: `Branch protection status unknown — insufficient token permissions`,
+        title: "Branch protection status unknown — insufficient token permissions",
         detail: `The GitHub token does not have admin access to read branch protection rules on "${defaultBranch}". Grant the installation read access to Administration to enable this check.`,
       });
     } else {
