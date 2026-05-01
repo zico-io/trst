@@ -1,4 +1,4 @@
-import { db, platformConfig, githubAppConfig } from "@trst/db";
+import { db, platformConfig, githubAppConfig, decryptField } from "@trst/db";
 import { createAppAuth } from "@octokit/auth-app";
 
 export interface ResolvedConfig {
@@ -20,9 +20,9 @@ export async function getConfig(): Promise<ResolvedConfig> {
   }
 
   return {
-    anthropicApiKey: row.anthropicApiKey,
+    anthropicApiKey: decryptField(row.anthropicApiKey),
     issueBackend: row.issueBackend ?? "none",
-    linearApiKey: row.linearApiKey,
+    linearApiKey: row.linearApiKey ? decryptField(row.linearApiKey) : null,
     linearTeamId: row.linearTeamId,
   };
 }
@@ -38,7 +38,7 @@ export async function getGitHubInstallationToken(): Promise<string> {
 
   const auth = createAppAuth({
     appId: row.appId,
-    privateKey: row.privateKey,
+    privateKey: decryptField(row.privateKey),
     installationId: row.installationId,
   });
 

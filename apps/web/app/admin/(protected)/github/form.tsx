@@ -162,9 +162,7 @@ export function GitHubAppForm({ current, hasPrivateKey, hasClientSecret, install
 
         {current.appName && (
           <a
-            href={`https://github.com/apps/${current.appName}/installations/new`}
-            target="_blank"
-            rel="noreferrer"
+            href="/api/github/install/start"
             className="px-4 py-2 rounded-lg text-sm font-medium border transition-colors"
             style={{
               borderColor: "var(--color-border)",

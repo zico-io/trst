@@ -1,6 +1,6 @@
 "use server";
 
-import { db, platformConfig, githubAppConfig, githubRepos, eq } from "@trst/db";
+import { db, platformConfig, githubAppConfig, githubRepos, eq, encryptField } from "@trst/db";
 import { revalidatePath } from "next/cache";
 
 // ── Platform config ──────────────────────────────────────────────────────────
@@ -11,6 +11,8 @@ export async function savePlatformConfig(data: {
   linearApiKey?: string;
   linearTeamId?: string;
 }) {
+  if (data.anthropicApiKey) data.anthropicApiKey = encryptField(data.anthropicApiKey);
+  if (data.linearApiKey) data.linearApiKey = encryptField(data.linearApiKey);
   await db
     .insert(platformConfig)
     .values({ id: "singleton", ...data, updatedAt: new Date() })
@@ -32,6 +34,9 @@ export async function saveGitHubAppConfig(data: {
   clientId?: string;
   clientSecret?: string;
 }) {
+  if (data.privateKey) data.privateKey = encryptField(data.privateKey);
+  if (data.webhookSecret) data.webhookSecret = encryptField(data.webhookSecret);
+  if (data.clientSecret) data.clientSecret = encryptField(data.clientSecret);
   await db
     .insert(githubAppConfig)
     .values({ id: "singleton", ...data, updatedAt: new Date() })
